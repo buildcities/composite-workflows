@@ -9,7 +9,7 @@ on:
       runs-ons:
         description: Platform to execute on
         type: string
-        default: 'ubuntu-latest'
+        default: ubuntu-latest
       node-version:
         type: string
         default: '["14.x"]'
