@@ -1,23 +1,32 @@
 name: build pipeline
-on: workflow_call
-env:
-  # Build
-  NODE_ENV: development
-  RUNTIME_ENV: dev
-
-  # Container Registry
-  CONTAINER_REGISTRY_HOSTNAME: ghcr.io
-  CONTAINER_REGISTRY_USERNAME: buildcities
-  CONTAINER_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-  CONTAINER_REGISTRY_REPOSITORY: buildcities
-  CONTAINER_REGISTRY_IMAGE_PREFIX: buildmvp
-
-  # Repository
-  GIT_DEPLOY_REPOSITORY_NAME: buildcities/mvp-deployment
-  GIT_DEPLOY_REPOSITORY_BRANCH: main
-  GIT_DEPLOY_REPOSITORY_AUTHOR_NAME: buildcities
-  GIT_DEPLOY_REPOSITORY_AUTHOR_EMAIL: rollymaduk@gmail.com
-  GIT_DEPLOY_REPOSITORY_AUTHOR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+on: 
+  workflow_call:
+    inputs:
+      ##todo change redwood env to allow for more generic builds
+      redwood-node-env:
+        description: Node environment var for redwood app
+        default: development
+      redwood-runtime-env:
+        description: Runtime environment var for redwood app
+        default: dev
+      registry-host:
+        description: Package registry host
+        required: true
+        default:  ghcr.io
+      registry-user:
+        description: Package registry user
+        required: true
+        default: buildcities
+      registry-repo:
+        required: true
+        description: Package registry source repo
+        default: buildcities
+      image-prefix:
+        description: Prefix for package registry
+        default: buildmvp
+    secrets:
+      token:
+        required: true
 
 jobs:
   #
@@ -50,9 +59,9 @@ jobs:
       - name: Docker login
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.CONTAINER_REGISTRY_HOSTNAME }}
-          username: ${{ env.CONTAINER_REGISTRY_USERNAME }}
-          password: ${{ env.CONTAINER_REGISTRY_PASSWORD }}
+          registry: ${{ inputs.registry-host }}
+          username: ${{ inputs.registyr-user }}
+          password: ${{ secrets.token }}
 
       # Build Docker image with a :latest and :<git sha> tag
       - name: Docker build
@@ -62,9 +71,9 @@ jobs:
           context: .
           file: ./docker/${{ matrix.platform }}/Dockerfile
           build-args: |
-            NODE_ENV=${{ env.NODE_ENV }}
-            RUNTIME_ENV=${{ env.RUNTIME_ENV }}
+            NODE_ENV=${{ inputs.redwood-node-env }}
+            RUNTIME_ENV=${{ inputs.redwood-runtime-env }}
            # DATABASE_URL=${{ secrets[matrix.DATABASE_URL] }}
           tags: |
-            ${{ env.CONTAINER_REGISTRY_HOSTNAME }}/${{ env.CONTAINER_REGISTRY_REPOSITORY }}/${{ env.CONTAINER_REGISTRY_IMAGE_PREFIX }}-${{ matrix.platform }}-${{ env.RUNTIME_ENV }}:latest
-            ${{ env.CONTAINER_REGISTRY_HOSTNAME }}/${{ env.CONTAINER_REGISTRY_REPOSITORY }}/${{ env.CONTAINER_REGISTRY_IMAGE_PREFIX }}-${{ matrix.platform }}-${{ env.RUNTIME_ENV }}:${{ github.sha }}
+            ${{ inputs.registry-host }}/${{ inputs.registry-repo }}/${{ inputs.image-prefix }}-${{ matrix.platform }}-${{ inputs.redwood-runtime-env }}:latest
+            ${{ inputs.registry-host }}/${{ inputs.registry-repo }}/${{ inputs.image-prefix }}-${{ matrix.platform }}-${{ inputs.redwood-runtime-env }}:${{ github.sha }}
