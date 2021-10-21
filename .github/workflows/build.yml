@@ -4,24 +4,30 @@ on:
     inputs:
       ##todo change redwood env to allow for more generic builds
       redwood-node-env:
+        type: string
         description: Node environment var for redwood app
         default: development
       redwood-runtime-env:
+        type: string
         description: Runtime environment var for redwood app
         default: dev
       registry-host:
+        type: string
         description: Package registry host
         required: true
         default:  ghcr.io
       registry-user:
+        type: string
         description: Package registry user
         required: true
         default: buildcities
       registry-repo:
         required: true
+        type: string
         description: Package registry source repo
         default: buildcities
       image-prefix:
+        type: string
         description: Prefix for package registry
         default: buildmvp
     secrets:
