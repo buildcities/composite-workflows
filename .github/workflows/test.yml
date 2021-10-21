@@ -13,9 +13,11 @@ on:
         type: string
         default: '["14.x"]'
       name:
+        type: string
         default: test
     secrets:
       token:
+        type: string
         required: true
 jobs:
   build:
