@@ -1,5 +1,5 @@
 name: test pipeline
-on: workflow_call
+on: workflow_call:
   inputs:
     default-branch:
       description:  Linter default branch
