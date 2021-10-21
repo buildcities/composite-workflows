@@ -1,0 +1,44 @@
+name: test pipeline
+on: workflow_call
+  inputs:
+    default-branch:
+      description:  Linter default branch
+      default: main
+    runs-ons:
+      description: Platform to execute on
+      type: string
+      default: 'ubuntu-latest'
+    node-version:
+      type: string
+      default: '["14.x"]'
+    name:
+      default: test
+  secrets:
+    token:
+      required: true
+jobs:
+  build:
+    name: ${{ inputs.name }}
+    runs-on: ${{ inputs.runs-on }}
+    strategy:
+      matrix:
+        node-version: ${{ fromJSON(inputs.node-version) }}
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Build & Test With Node ${{matrix.node-version}}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+    - run: yarn install
+    - run: yarn jest test
+    - name: Lint Code base
+      uses: github/super-linter@v4
+      env:
+        VALIDATE_ALL_CODEBASE: false
+        DEFAULT_BRANCH: {{ inputs.default-branch }}
+        GITHUB_TOKEN: ${{ secrets.token }}
