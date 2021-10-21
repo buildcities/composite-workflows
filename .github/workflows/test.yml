@@ -1,21 +1,22 @@
 name: test pipeline
-on: workflow_call:
-  inputs:
-    default-branch:
-      description:  Linter default branch
-      default: main
-    runs-ons:
-      description: Platform to execute on
-      type: string
-      default: 'ubuntu-latest'
-    node-version:
-      type: string
-      default: '["14.x"]'
-    name:
-      default: test
-  secrets:
-    token:
-      required: true
+on: 
+  workflow_call:
+    inputs:
+      default-branch:
+        description:  Linter default branch
+        default: main
+      runs-ons:
+        description: Platform to execute on
+        type: string
+        default: 'ubuntu-latest'
+      node-version:
+        type: string
+        default: '["14.x"]'
+      name:
+        default: test
+    secrets:
+      token:
+        required: true
 jobs:
   build:
     name: ${{ inputs.name }}
