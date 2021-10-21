@@ -4,6 +4,7 @@ on:
     inputs:
       default-branch:
         description:  Linter default branch
+        type: string
         default: main
       runs-ons:
         description: Platform to execute on
@@ -42,5 +43,5 @@ jobs:
       uses: github/super-linter@v4
       env:
         VALIDATE_ALL_CODEBASE: false
-        DEFAULT_BRANCH: {{ inputs.default-branch }}
+        DEFAULT_BRANCH: ${{ inputs.default-branch }}
         GITHUB_TOKEN: ${{ secrets.token }}
