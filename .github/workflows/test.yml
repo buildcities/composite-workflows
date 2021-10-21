@@ -37,7 +37,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    - run: yarn install
+    - run: yarn install --frozen-lockfile
     - run: yarn jest test
     - name: Lint Code base
       uses: github/super-linter@v4
