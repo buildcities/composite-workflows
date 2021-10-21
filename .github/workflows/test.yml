@@ -6,7 +6,7 @@ on:
         description:  Linter default branch
         type: string
         default: main
-      runs-ons:
+      runs-on:
         description: Platform to execute on
         type: string
         default: ubuntu-latest
