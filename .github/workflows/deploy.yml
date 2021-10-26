@@ -2,7 +2,6 @@ name: deploy-pipeline
 on:
   workflow_call:
     inputs:
-      inputs:
       ##todo change redwood env to allow for more generic builds
       runs-on:
         type: string
