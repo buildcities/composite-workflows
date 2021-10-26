@@ -32,14 +32,32 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Build & Test With Node ${{matrix.node-version}}
-        uses: actions/setup-node@v2
+      - name: Build api binaries ${{matrix.node-version}}
+        uses: bahmutov/npm-install@v1
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "yarn"
-      - run: yarn install --frozen-lockfile
-      - run: yarn jest api
-      - run: yarn rw test web --no-watch
+          working-directory: api
+          useRollingCache: true
+          install-command: yarn --frozen-lockfile --silent
+
+      - name: Build web binaries ${{matrix.node-version}}
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: web
+          useRollingCache: true
+          install-command: yarn --frozen-lockfile --silent
+
+      #  uses: actions/setup-node@v2
+      #  with:
+      #    node-version: ${{ matrix.node-version }}
+      #    cache: "yarn"
+      - name: run api tests
+        run: yarn jest api
+        working-directory: api
+
+      - name: run web tests
+        run: yarn rw test web --no-watch
+        working-directory: web
+
       - name: Lint Code base
         uses: github/super-linter/slim@v4
         env:
