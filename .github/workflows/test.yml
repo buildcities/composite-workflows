@@ -47,7 +47,7 @@ jobs:
         run: yarn jest api
 
       - name: run web tests
-        run: yarn rw test --no-watch
+        run: yarn rw test web --no-watch
 
       - name: Lint Code base
         uses: github/super-linter/slim@v4
