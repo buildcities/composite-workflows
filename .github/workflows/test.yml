@@ -15,12 +15,12 @@ on:
         default: '["14.x"]'
       name:
         type: string
-        default: test
+        default: Test
     secrets:
       token:
         required: true
 jobs:
-  build:
+  test:
     name: ${{ inputs.name }}
     runs-on: ${{ inputs.runs-on }}
     strategy:
@@ -38,7 +38,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
       - run: yarn install --frozen-lockfile
-      - run: yarn jest test
+      - run: yarn jest api
+      - run: yarn rw test web --no-watch
       - name: Lint Code base
         uses: github/super-linter@v4
         env:
