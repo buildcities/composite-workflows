@@ -1,9 +1,9 @@
 name: test pipeline
-on: 
+on:
   workflow_call:
     inputs:
       default-branch:
-        description:  Linter default branch
+        description: Linter default branch
         type: string
         default: main
       runs-on:
@@ -29,19 +29,19 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Build & Test With Node ${{matrix.node-version}}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-    - run: yarn install --frozen-lockfile
-    - run: yarn jest test
-    - name: Lint Code base
-      uses: github/super-linter@v4
-      env:
-        VALIDATE_ALL_CODEBASE: false
-        DEFAULT_BRANCH: ${{ inputs.default-branch }}
-        GITHUB_TOKEN: ${{ secrets.token }}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Build & Test With Node ${{matrix.node-version}}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+      - run: yarn install --frozen-lockfile
+      - run: yarn jest test
+      - name: Lint Code base
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: ${{ inputs.default-branch }}
+          GITHUB_TOKEN: ${{ secrets.token }}

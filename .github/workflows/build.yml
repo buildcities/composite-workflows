@@ -1,8 +1,12 @@
 name: build pipeline
-on: 
+on:
   workflow_call:
     inputs:
       ##todo change redwood env to allow for more generic builds
+      runs-on:
+        type: string
+        description: Operating system
+        default: ubuntu-20.04
       redwood-node-env:
         type: string
         description: Node environment var for redwood app
@@ -15,7 +19,7 @@ on:
         type: string
         description: Package registry host
         required: true
-        default:  ghcr.io
+        default: ghcr.io
       registry-user:
         type: string
         description: Package registry user
@@ -33,13 +37,14 @@ on:
     secrets:
       token:
         required: true
+
 jobs:
   #
   # Build
   #
   build:
     name: Build
-    runs-on: ubuntu-20.04
+    runs-on: ${{ inputs.runs-on }}
     timeout-minutes: 10
     strategy:
       fail-fast: true
@@ -51,7 +56,6 @@ jobs:
           - platform: web
 
     steps:
-
       # Checkout source code
       - name: Checkout source code
         uses: actions/checkout@v2
@@ -78,7 +82,7 @@ jobs:
           build-args: |
             NODE_ENV=${{ inputs.redwood-node-env }}
             RUNTIME_ENV=${{ inputs.redwood-runtime-env }}
-           # DATABASE_URL=${{ secrets[matrix.DATABASE_URL] }}
+          # DATABASE_URL=${{ secrets[matrix.DATABASE_URL] }}
           tags: |
             ${{ inputs.registry-host }}/${{ inputs.registry-repo }}/${{ inputs.image-prefix }}-${{ matrix.platform }}-${{ inputs.redwood-runtime-env }}:latest
             ${{ inputs.registry-host }}/${{ inputs.registry-repo }}/${{ inputs.image-prefix }}-${{ matrix.platform }}-${{ inputs.redwood-runtime-env }}:${{ github.sha }}
