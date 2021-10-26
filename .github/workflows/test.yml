@@ -37,6 +37,7 @@ jobs:
         with:
           working-directory: api
           useRollingCache: true
+          useLockFile: false
           install-command: yarn --frozen-lockfile --silent
 
       - name: Build web binaries ${{matrix.node-version}}
@@ -44,6 +45,7 @@ jobs:
         with:
           working-directory: web
           useRollingCache: true
+          useLockFile: false
           install-command: yarn --frozen-lockfile --silent
 
       #  uses: actions/setup-node@v2
