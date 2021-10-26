@@ -126,6 +126,6 @@ jobs:
       - name: Deployment Status
         uses: chrnorm/deployment-status@v1.0.0
         with:
-          token: "${{ token }}"
+          token: "${{ secrets.token }}"
           target_url: https://buildmvp-app.{{inputs.redwood-runtime-env}}.35.232.11.64.nip.io/
           environment: ${{ inputs.redwood-node-env }}
