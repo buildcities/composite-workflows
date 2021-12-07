@@ -49,9 +49,8 @@ jobs:
       #- name: run web tests
       #  run: yarn rw test web --no-watch
 
-      - name: Lint Code base
-        uses: github/super-linter/slim@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: ${{ inputs.default-branch }}
-          GITHUB_TOKEN: ${{ secrets.token }}
+      - name: Lint code base
+        run: yarn rw lint --fix
+
+      - name: Type check code base
+        run: yarn rw type-check
