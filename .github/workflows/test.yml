@@ -12,7 +12,7 @@ on:
         default: ubuntu-latest
       node-version:
         type: string
-        default: '[">=14.17<=16.x"]'
+        default: '[">=14.17 <=16.x"]'
       name:
         type: string
         default: Test
