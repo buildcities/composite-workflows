@@ -46,8 +46,8 @@ jobs:
       #- name: run api tests
       #  run: yarn rw test api --no-watch
 
-      - name: run web tests
-        run: yarn rw test web --no-watch
+      #- name: run web tests
+      #  run: yarn rw test web --no-watch
 
       - name: Lint Code base
         uses: github/super-linter/slim@v4
