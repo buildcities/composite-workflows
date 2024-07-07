@@ -52,5 +52,8 @@ jobs:
       - name: Lint code base
         run: yarn rw lint --fix
 
+      - name: Generate redwood types
+        run: yarn rw generate types
+
       - name: Type check code base
         run: yarn rw type-check
